@@ -15,7 +15,7 @@ jobs:
           node-version: 20
 
       - name: install dependencies
-        run: npm ci --workspaces
+        run: npm i --workspaces
 
       - name: build
         run: npm run build
