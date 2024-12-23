@@ -1,0 +1,34 @@
+name: deploy-with-version
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: install dependencies
+        run: npm ci --workspaces
+
+      - name: build
+        run: npm run build
+
+      - name: export-static (branch)
+        run: >
+          npm run export-static -- \
+            --realmName sdk7-goerli-plaza-test \
+            --commsAdapter ws-room:ws-room-service.decentraland.org/rooms/sdk7-goerli-plaza-test \
+            --baseUrl 'https://dclexplorer.github.io/sdk7-goerli-plaza/' \
+            --destination ipfs/
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./ipfs/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
