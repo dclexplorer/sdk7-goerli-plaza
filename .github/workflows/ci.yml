@@ -2,8 +2,6 @@ name: push-deploy-world
 
 on:
   push:
-    branches:
-      - 'main'
   pull_request:
 
 jobs:
